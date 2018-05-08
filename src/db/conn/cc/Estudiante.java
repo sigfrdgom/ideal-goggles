@@ -86,6 +86,32 @@ public class Estudiante {
          return d;
      }
      
+       public ResultSet mayorRegistro() throws Exception{
+         ResultSet mayor = null;
+        try{
+        cn.conectar();     
+        mayor = cn.getValores("SELECT MAX(IdEstudiante) FROM Estudiantes;");
+        } catch (Exception e){
+            cn.desconectar();
+            System.out.println("No puede obtener el maximo");      
+        } 
+        return mayor;
+                
+    }
+    public ResultSet Obteneri(String p) throws Exception{
+     ResultSet d=null;
+         try {
+         cn.conectar();
+         d=cn.getValores("select * from inventario P where P.CodBarra ='"+p+"';");    
+         } catch (Exception e) {
+             cn.desconectar();
+             System.out.println("Se cago en algo :v"); 
+         }finally{
+         
+         }
+         return d;
+     }
+     
    
 }
 

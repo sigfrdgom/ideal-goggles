@@ -13,7 +13,7 @@ import java.sql.ResultSet;
  * @author sig
  */
 public class Materia {
-   private int IdParametro;
+     private int IdParametro;
     private String Nombre;
     private String Valor;
 

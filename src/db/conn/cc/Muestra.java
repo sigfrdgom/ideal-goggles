@@ -6,11 +6,13 @@
 package db.conn.cc;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -25,19 +27,20 @@ public class Muestra extends javax.swing.JFrame {
     /**
      * Creates new form Muestra
      */
-    public Muestra() {
+    public Muestra() throws Exception {
         initComponents();
-        tHeadEstudiante = tblMuestra.getTableHeader();
+        tHeadEstudiante = tblMuestraEstudiantes.getTableHeader();
         modeloEstudiante.addColumn("IdEstudiante");
         modeloEstudiante.addColumn("Nombres");
         modeloEstudiante.addColumn("Apellidos");
         modeloEstudiante.addColumn("Fecha Nacimiento");
         modeloEstudiante.addColumn("Sexo");
-        tblMuestra.setModel(modeloEstudiante);
+        tblMuestraEstudiantes.setModel(modeloEstudiante);
+        llenarTabla();
        
         
     }
-public void llenarTabla() throws Exception{
+public final void llenarTabla() throws Exception{
     Estudiante es=new Estudiante();
     limpiarTabla();
     ResultSet rs=null;
@@ -58,16 +61,37 @@ public void llenarTabla() throws Exception{
         } catch (Exception e) {
              System.out.println("Fallo en algo .v");
         }
-        tblMuestra.setModel(modeloEstudiante);
+        tblMuestraEstudiantes.setModel(modeloEstudiante);
          }   
 }  
 
 public void limpiarTabla(){
- for (int i = 0; i < tblMuestra.getRowCount(); i++) {
+ for (int i = 0; i < tblMuestraEstudiantes.getRowCount(); i++) {
            modeloEstudiante.removeRow(i);
            i-=1;
        }
 }
+
+public void llenarMaximoEstudiante() throws Exception{
+Estudiante es=new Estudiante();
+    //limpiarTabla();
+    ResultSet rs=null;
+    rs=es.mayorRegistro();
+    if (!rs.isBeforeFirst()) { 
+             System.out.println("No existe"); 
+}    else{
+         try {
+            while (rs.next()) {
+                String IdEstudiante = rs.getString(1); // por el numero de columna
+                System.out.println("ok1");
+                txtID.setText(IdEstudiante);
+                System.out.println("puso el max estudiante");       
+            }
+        } catch (Exception e) {
+             System.out.println("Fallo en algo .v");
+        }
+         }   
+}  
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -77,34 +101,62 @@ public void limpiarTabla(){
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        btnLlenarEstudiante = new javax.swing.JButton();
         txtApellido = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        txtID = new javax.swing.JTextField();
         txtFecha = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtSexo = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblMuestra = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        txtID = new javax.swing.JTextField();
+        tblMuestraEstudiantes = new javax.swing.JTable();
+        btnNuevoRegistro = new javax.swing.JButton();
+        btnAgregarEstudiante = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        btnModificarEstudiante = new javax.swing.JButton();
+        txtNombre = new javax.swing.JTextField();
+        btnEliminarEstudiante = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        btnLlenarMateria = new javax.swing.JButton();
+        txtUnidadesValorativas = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txtIDMateria = new javax.swing.JTextField();
+        txtComentario = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblMuestraMaterias = new javax.swing.JTable();
+        btnNuevoRegistroMateria = new javax.swing.JButton();
+        btnAgregarMateria = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        btnModificarMateria = new javax.swing.JButton();
+        txtNombreMateria = new javax.swing.JTextField();
+        btnEliminarMateria = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Nombre");
+        btnLlenarEstudiante.setText("    Llenar   ");
+        btnLlenarEstudiante.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLlenarEstudianteMouseClicked(evt);
+            }
+        });
 
-        jLabel2.setText("Apellido");
+        jLabel5.setText("ID");
 
         jLabel3.setText("Fecha");
 
+        txtID.setEditable(false);
+
         jLabel4.setText("Sexo");
 
-        tblMuestra.setModel(new javax.swing.table.DefaultTableModel(
+        tblMuestraEstudiantes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -115,188 +167,400 @@ public void limpiarTabla(){
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblMuestra);
+        jScrollPane1.setViewportView(tblMuestraEstudiantes);
 
-        jButton1.setText("  Agregar  ");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnNuevoRegistro.setText("    Nuevo   ");
+        btnNuevoRegistro.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                btnNuevoRegistroMouseClicked(evt);
             }
         });
 
-        jButton2.setText(" Modificar ");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnAgregarEstudiante.setText("  Agregar  ");
+        btnAgregarEstudiante.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+                btnAgregarEstudianteMouseClicked(evt);
             }
         });
 
-        jButton3.setText("  Eliminar  ");
+        jLabel1.setText("Nombre");
 
-        jButton4.setText("    Llenar   ");
-        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnModificarEstudiante.setText(" Modificar ");
+        btnModificarEstudiante.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton4MouseClicked(evt);
+                btnModificarEstudianteMouseClicked(evt);
             }
         });
 
-        jLabel5.setText("ID");
+        btnEliminarEstudiante.setText("  Eliminar  ");
+        btnEliminarEstudiante.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnEliminarEstudianteMouseClicked(evt);
+            }
+        });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
+        jLabel2.setText("Apellido");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtApellido, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtApellido))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4))
                         .addGap(33, 33, 33)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtSexo)
                             .addComponent(txtFecha)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
-                            .addComponent(txtID))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtNombre)
+                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(82, 82, 82)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAgregarEstudiante)
+                    .addComponent(btnModificarEstudiante)
+                    .addComponent(btnEliminarEstudiante)
+                    .addComponent(btnLlenarEstudiante)
+                    .addComponent(btnNuevoRegistro))
+                .addContainerGap(136, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnNuevoRegistro)))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(btnAgregarEstudiante))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(btnModificarEstudiante))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
+                    .addComponent(btnEliminarEstudiante))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
+                    .addComponent(btnLlenarEstudiante))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
+        jTabbedPane1.addTab("Estudiantes", jPanel1);
+
+        btnLlenarMateria.setText("    Llenar   ");
+        btnLlenarMateria.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLlenarMateriaMouseClicked(evt);
+            }
+        });
+
+        jLabel7.setText("ID");
+
+        jLabel8.setText("Comentario");
+
+        tblMuestraMaterias.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tblMuestraMaterias);
+
+        btnNuevoRegistroMateria.setText("    Nuevo   ");
+        btnNuevoRegistroMateria.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnNuevoRegistroMateriaMouseClicked(evt);
+            }
+        });
+
+        btnAgregarMateria.setText("  Agregar  ");
+        btnAgregarMateria.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAgregarMateriaMouseClicked(evt);
+            }
+        });
+
+        jLabel10.setText("Nombre");
+
+        btnModificarMateria.setText(" Modificar ");
+        btnModificarMateria.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnModificarMateriaMouseClicked(evt);
+            }
+        });
+
+        btnEliminarMateria.setText("  Eliminar  ");
+
+        jLabel11.setText("UV");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel8)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtNombreMateria)
+                            .addComponent(txtIDMateria, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addGap(54, 54, 54)
+                        .addComponent(txtUnidadesValorativas))
+                    .addComponent(txtComentario))
+                .addGap(82, 82, 82)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAgregarMateria)
+                    .addComponent(btnModificarMateria)
+                    .addComponent(btnEliminarMateria)
+                    .addComponent(btnLlenarMateria)
+                    .addComponent(btnNuevoRegistroMateria))
+                .addContainerGap(136, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtIDMateria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnNuevoRegistroMateria)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtNombreMateria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAgregarMateria))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(txtUnidadesValorativas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnModificarMateria))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnEliminarMateria)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnLlenarMateria)
+                    .addComponent(txtComentario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Materias", jPanel4);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 635, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 438, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Materias por Estudiante", jPanel3);
+
+        jLabel6.setText("Mantenimiento de tablas para ejemplo de progra 2");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(115, 115, 115)
+                .addComponent(jLabel6)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6)
+                .addGap(18, 18, 18)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
-      try {
-          llenarTabla();
-      } catch (Exception ex) {
-          Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
-          System.out.println("No logra llenar la tabla");
-      }
-    }//GEN-LAST:event_jButton4MouseClicked
+    private void btnModificarMateriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMateriaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnModificarMateriaMouseClicked
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-           Estudiante ctp= new Estudiante();
-                 int idEstudiante = 0;//txtNombre.getText().toUpperCase();
-                String Nombre = txtNombre.getText().toUpperCase();
-                String Apellido = txtApellido.getText().toUpperCase();
-                String Fecha = txtFecha.getText().toUpperCase();
-                String Sexo = txtSexo.getText().toUpperCase();
-            
-                Object P[]={idEstudiante,Nombre,Apellido,Fecha,Sexo};
-                try {
-                    ctp.Agregar(P);        
-                } catch (Exception ex) {
-                    Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-            txtNombre.setText("");
-             txtApellido.setText("");
-             txtFecha.setText("");
-             txtSexo.setText("");
-            JOptionPane.showMessageDialog(null, "Agregado con exito");
-      try {
-          llenarTabla();
-      } catch (Exception ex) {
-          Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
-          JOptionPane.showMessageDialog(null, "no logra mostrar");
-      }
-            
-            
-  
-        
-    }//GEN-LAST:event_jButton1MouseClicked
+    private void btnAgregarMateriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMateriaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarMateriaMouseClicked
 
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-                Estudiante ctp= new Estudiante();
+    private void btnNuevoRegistroMateriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoRegistroMateriaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNuevoRegistroMateriaMouseClicked
 
-                
-                String idEstudiante = txtID.getText().toUpperCase();//txtNombre.getText().toUpperCase();
-                String Nombre = txtNombre.getText().toUpperCase();
-                String Apellido = txtApellido.getText().toUpperCase();
-                String Fecha = txtFecha.getText().toUpperCase();
-                String Sexo = txtSexo.getText().toUpperCase();
-                
-                
-               
-                
-                Object P[]={idEstudiante,Nombre,Apellido,Fecha,Sexo};
-                
-        
-                try {
-                    ctp.Modificar(P);
-                    
-                    
-                } catch (Exception ex) {
-                    Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-            txtNombre.setText("");
-             txtApellido.setText("");
-             txtFecha.setText("");
-             txtSexo.setText("");
-            JOptionPane.showMessageDialog(null, "modificado con exito");
-      try {
-          llenarTabla();
-      } catch (Exception ex) {
-          Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
-          JOptionPane.showMessageDialog(null, "no logra mostrar");
-      }
-            
-            
-  
+    private void btnLlenarMateriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLlenarMateriaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLlenarMateriaMouseClicked
+
+    private void btnModificarEstudianteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarEstudianteMouseClicked
+        Estudiante ctp= new Estudiante();
+
+        String idEstudiante = txtID.getText().toUpperCase();//txtNombre.getText().toUpperCase();
+        String Nombre = txtNombre.getText().toUpperCase();
+        String Apellido = txtApellido.getText().toUpperCase();
+        String Fecha = txtFecha.getText().toUpperCase();
+        String Sexo = txtSexo.getText().toUpperCase();
+
+        Object P[]={idEstudiante,Nombre,Apellido,Fecha,Sexo};
+
+        try {
+            ctp.Modificar(P);
+
+        } catch (Exception ex) {
+            Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        txtNombre.setText("");
+        txtApellido.setText("");
+        txtFecha.setText("");
+        txtSexo.setText("");
+        JOptionPane.showMessageDialog(null, "modificado con exito");
+        try {
+            llenarTabla();
+        } catch (Exception ex) {
+            Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "no logra mostrar");
+        }
+
+    }//GEN-LAST:event_btnModificarEstudianteMouseClicked
+
+    private void btnAgregarEstudianteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarEstudianteMouseClicked
+        Estudiante ctp= new Estudiante();
+        int idEstudiante = 0;//txtNombre.getText().toUpperCase();
+        String Nombre = txtNombre.getText().toUpperCase();
+        String Apellido = txtApellido.getText().toUpperCase();
+        String Fecha = txtFecha.getText().toUpperCase();
+        String Sexo = txtSexo.getText().toUpperCase();
+
+        Object P[]={idEstudiante,Nombre,Apellido,Fecha,Sexo};
+        try {
+            ctp.Agregar(P);
+        } catch (Exception ex) {
+            Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        txtNombre.setText("");
+        txtApellido.setText("");
+        txtFecha.setText("");
+        txtSexo.setText("");
+        JOptionPane.showMessageDialog(null, "Agregado con exito");
+        try {
+            llenarTabla();
+        } catch (Exception ex) {
+            Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "no logra mostrar");
+        }
+
+    }//GEN-LAST:event_btnAgregarEstudianteMouseClicked
+
+    private void btnNuevoRegistroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoRegistroMouseClicked
+        try {
+            llenarMaximoEstudiante();
+        } catch (Exception ex) {
+            Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnNuevoRegistroMouseClicked
+
+    private void btnLlenarEstudianteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLlenarEstudianteMouseClicked
+        try {
+            llenarTabla();
+        } catch (Exception ex) {
+            Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("No logra llenar la tabla");
+        }
+    }//GEN-LAST:event_btnLlenarEstudianteMouseClicked
+
+    private void btnEliminarEstudianteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarEstudianteMouseClicked
+        Estudiante est = new Estudiante();
+        TableModel tableModel = tblMuestraEstudiantes.getModel();
     
-    }//GEN-LAST:event_jButton2MouseClicked
+        try {
+        Object mostrar=modeloEstudiante.getValueAt(tblMuestraEstudiantes.getSelectedRow(), 0); 
+            System.out.println("lo hizo1");
+    
+        ResultSet rs; 
+        int decide=JOptionPane.showConfirmDialog(null, "Desea borrar al estudiante:");// +modeloEstudiante.getValueAt(tblMuestraMaterias.getSelectedRow(), 1));
+        System.out.println("lo hizo2");
+        if(decide==0){
+            try {
+                est.Eliminar(mostrar);
+                System.out.println("Elimino el estudiante");
+                limpiarTabla();
+                llenarTabla();
+            } catch (Exception ex) {
+                Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("No pudo eliminar el estudiante");
+            }
+        
+        
+        }
+
+}catch(Exception ex){
+ Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("No pudo eliminar el estudiante parte 1");
+}
+        
+
+    
+    }//GEN-LAST:event_btnEliminarEstudianteMouseClicked
 
     /**
      * @param args the command line arguments
@@ -328,27 +592,52 @@ public void limpiarTabla(){
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Muestra().setVisible(true);
+                try {
+                    new Muestra().setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(Muestra.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnAgregarEstudiante;
+    private javax.swing.JButton btnAgregarMateria;
+    private javax.swing.JButton btnEliminarEstudiante;
+    private javax.swing.JButton btnEliminarMateria;
+    private javax.swing.JButton btnLlenarEstudiante;
+    private javax.swing.JButton btnLlenarMateria;
+    private javax.swing.JButton btnModificarEstudiante;
+    private javax.swing.JButton btnModificarMateria;
+    private javax.swing.JButton btnNuevoRegistro;
+    private javax.swing.JButton btnNuevoRegistroMateria;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblMuestra;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable tblMuestraEstudiantes;
+    private javax.swing.JTable tblMuestraMaterias;
     private javax.swing.JTextField txtApellido;
+    private javax.swing.JTextField txtComentario;
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtID;
+    private javax.swing.JTextField txtIDMateria;
     private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtNombreMateria;
     private javax.swing.JTextField txtSexo;
+    private javax.swing.JTextField txtUnidadesValorativas;
     // End of variables declaration//GEN-END:variables
 }
